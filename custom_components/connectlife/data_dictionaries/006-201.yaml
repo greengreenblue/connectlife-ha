@@ -4,7 +4,6 @@ climate:
       t_power: 1
       t_eco: 1
       t_fan_mute: 0
-      t_sleep: 0
       t_super: 0
     - preset: mute
       t_power: 1
@@ -14,62 +13,13 @@ climate:
       t_power: 1
       t_eco: 1
       t_fan_mute: 1
-      t_sleep: 0
       t_super: 0
     - preset: super
       t_power: 1
       t_super: 1
       t_eco: 0
       t_fan_mute: 0
-      t_sleep: 0
-    - preset: sleep_1
-      t_power: 1
-      t_eco: 0
-      t_sleep: 1
-      t_fan_mute: 0
-      t_super: 0
-    - preset: sleep_2
-      t_power: 1
-      t_eco: 0
-      t_sleep: 2
-      t_fan_mute: 0
-      t_super: 0
-    - preset: sleep_3
-      t_power: 1
-      t_eco: 0
-      t_sleep: 3
-      t_fan_mute: 0
-      t_super: 0
-    - preset: sleep_4
-      t_power: 1
-      t_eco: 0
-      t_sleep: 4
-      t_fan_mute: 0
-      t_super: 0
-    - preset: eco_sleep_1
-      t_power: 1
-      t_eco: 1  
-      t_sleep: 1
-      t_fan_mute: 0
-      t_super: 0
-    - preset: eco_sleep_2
-      t_power: 1
-      t_eco: 1
-      t_sleep: 2
-      t_fan_mute: 0
-      t_super: 0
-    - preset: eco_sleep_3
-      t_power: 1
-      t_eco: 1
-      t_sleep: 3
-      t_fan_mute: 0
-      t_super: 0
-    - preset: eco_sleep_4
-      t_power: 1
-      t_eco: 1
-      t_sleep: 4
-      t_fan_mute: 0
-      t_super: 0
+
 properties:
   - property: f_temp_in
     climate:
@@ -95,15 +45,6 @@ properties:
   - property: t_power
     climate:
       target: is_on
-  - property: t_sleep
-    icon: mdi:sleep
-    select:
-      options:
-        0: "off"
-        1: general
-        2: for_old
-        3: for_young
-        4: for_kid
   - property: t_super
     icon: mdi:run-fast
     switch:
