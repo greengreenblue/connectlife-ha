@@ -90,7 +90,12 @@
         },
         "hide": {
           "type": "boolean",
-          "description": "If Home Assistant should initially hide the sensor entity for this property.",
+          "description": "If Home Assistant should initially hide the entity for this property.",
+          "default": false
+        },
+        "disable": {
+          "type": "boolean",
+          "description": "If Home Assistant should not create an entity for this property.",
           "default": false
         }
       },
@@ -106,6 +111,13 @@
       "properties": {
         "device_class": {
           "$ref": "#/definitions/BinarySensorDeviceClass"
+        },
+        "options": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "Map of integer to boolean. By default, 0 and 1 is mapped to off (as 0 often implies that the sensor is not available), and 1 to true."
         }
       },
       "title": "BinarySensor"

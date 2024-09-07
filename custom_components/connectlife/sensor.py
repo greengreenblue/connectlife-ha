@@ -35,7 +35,7 @@ async def async_setup_entry(
         dictionary = Dictionaries.get_dictionary(appliance)
         async_add_entities(
             ConnectLifeStatusSensor(coordinator, appliance, s, dictionary.properties[s])
-            for s in appliance.status_list if hasattr(dictionary.properties[s], Platform.SENSOR)
+            for s in appliance.status_list if hasattr(dictionary.properties[s], Platform.SENSOR) and not dictionary.properties[s].disable
         )
 
     platform = entity_platform.async_get_current_platform()
@@ -95,7 +95,7 @@ class ConnectLifeStatusSensor(ConnectLifeEntity, SensorEntity):
             if self.device_class == SensorDeviceClass.ENUM:
                 if value in self.options_map:
                     value = self.options_map[value]
-                else:
+                elif value != self.unknown_value:
                     _LOGGER.warning("Got unexpected value %d for %s (%s)", value, self.status, self.nickname)
                     value = None
             self._attr_native_value = value if value != self.unknown_value else None

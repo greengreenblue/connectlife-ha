@@ -31,6 +31,11 @@ You need to restart Home Assistant to load mapping changes.
 
 ### Mapping tips and tricks:
 
+- Generate a skeleton file using the [connectlife](https://pypi.org/project/connectlife/) package:
+  ```bash
+  pip install connectlife
+  python -m connectlife.dump --username <username> --password <password> --format dd
+  ``` 
 - Inspect the existing mappings files in this directory.
 - Change settings in the ConnectLife app while monitoring value changes in Home Assistant. Take a note of which
   property is changes, what the value is, and what the button or action is named in the ConnectLife app.
@@ -42,19 +47,20 @@ You need to restart Home Assistant to load mapping changes.
 
 ## Property
 
-| Item            | Type                               | Description                                                                                                                                    |
-|-----------------|------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------|
-| `property`      | string                             | Name of status/property.                                                                                                                       |
-| `hide`          | `true`, `false`                    | If Home Assistant should initially hide the sensor entity for this property. Defaults to `false`, but is set to `true` for unknown properties. |
-| `icon`          | `mdi:eye`, etc.                    | Icon to use for the entity.                                                                                                                    |
-| `binary_sensor` | [BinarySensor](#type-binarysensor) | Create a binary sensor of the property.                                                                                                        |
-| `climate`       | [Climate](#type-climate)           | Map the property to a climate entity for the device.                                                                                           |
-| `humidifier`    | [Humidifier](#type-humidifier)     | Map the property to a humidifier entity for the device.                                                                                        |
-| `number`        | [Number](#type-number)             | Create a number entity of the property.                                                                                                        |
-| `select`        | [Select](#type-select)             | Create a selector of the property.                                                                                                             |
-| `sensor`        | [Sensor](#type-sensor)             | Create a sensor of the property. This is the default.                                                                                          |
-| `switch`        | [Switch](#type-switch)             | Create a switch of the property.                                                                                                               |
-| `water_heater`  | [WaterHeater](#type-waterheater)   | Map the property to a water heater entity for the device.                                                                                      |
+| Item            | Type                               | Description                                                                                                                             |
+|-----------------|------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------|
+| `property`      | string                             | Name of status/property.                                                                                                                |
+| `disable`       | `true`, `false`                    | If Home Assistant should not create an entity for this property. Defaults to `false`.                                                   |
+| `hide`          | `true`, `false`                    | If Home Assistant should initially hide the entity for this property. Defaults to `false`, but is set to `true` for unknown properties. |
+| `icon`          | `mdi:eye`, etc.                    | Icon to use for the entity.                                                                                                             |
+| `binary_sensor` | [BinarySensor](#type-binarysensor) | Create a binary sensor of the property.                                                                                                 |
+| `climate`       | [Climate](#type-climate)           | Map the property to a climate entity for the device.                                                                                    |
+| `humidifier`    | [Humidifier](#type-humidifier)     | Map the property to a humidifier entity for the device.                                                                                 |
+| `number`        | [Number](#type-number)             | Create a number entity of the property.                                                                                                 |
+| `select`        | [Select](#type-select)             | Create a selector of the property.                                                                                                      |
+| `sensor`        | [Sensor](#type-sensor)             | Create a sensor of the property. This is the default.                                                                                   |
+| `switch`        | [Switch](#type-switch)             | Create a switch of the property.                                                                                                        |
+| `water_heater`  | [WaterHeater](#type-waterheater)   | Map the property to a water heater entity for the device.                                                                               |
 
 If an entity mapping is not given, the property is mapped to a sensor entity.
 
@@ -63,13 +69,23 @@ validated.
 
 ## Type `BinarySensor`
 
-Domain `binary_sensor` can be used for read only properties where `0` is not available, `1` is off, and `2` is on. Both
-`0`and `1` is mapped to off.
+Domain `binary_sensor` can be used for read only properties. By default, `0` and `1` is mapped to off and `2` to on,
+as `0` often implies that the sensor state is not available. For other mappings, provide `options`.
 
-| Item           | Type                     | Description                                                                                                                                                           |
-|----------------|--------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `device_class` | `power`, `problem`, etc. | For domain `binary_sensor`, name of any [BinarySensorDeviceClass enum](https://developers.home-assistant.io/docs/core/entity/binary-sensor#available-device-classes). | 
+| Item           | Type                             | Description                                                                                                                                                           |
+|----------------|----------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `device_class` | `power`, `problem`, etc.         | For domain `binary_sensor`, name of any [BinarySensorDeviceClass enum](https://developers.home-assistant.io/docs/core/entity/binary-sensor#available-device-classes). |   
+| `options`      | dictionary of integer to boolean |                                                                                                                                                                       |
 
+Example:
+```yaml
+- property: alarm
+  binary_sensor:
+    device_class: problem
+    options:
+      0: off
+      1: on
+```
 
 ## Type `Climate`:
 

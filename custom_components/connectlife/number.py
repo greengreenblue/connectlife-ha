@@ -29,8 +29,8 @@ async def async_setup_entry(
     for appliance in coordinator.data.values():
         dictionary = Dictionaries.get_dictionary(appliance)
         async_add_entities(
-            ConnectLifeNumberEntity(coordinator, appliance, s, dictionary.properties[s])
-            for s in appliance.status_list if hasattr(dictionary.properties[s], Platform.NUMBER)
+            ConnectLifeNumberEntity(coordinator, appliance, s, dictionary.properties[s], config_entry)
+            for s in appliance.status_list if hasattr(dictionary.properties[s], Platform.NUMBER) and not dictionary.properties[s].disable
         )
 
 
@@ -44,10 +44,11 @@ class ConnectLifeNumberEntity(ConnectLifeEntity, NumberEntity):
             coordinator: ConnectLifeCoordinator,
             appliance: ConnectLifeAppliance,
             status: str,
-            dd_entry: Property
+            dd_entry: Property,
+            config_entry: ConfigEntry,
     ):
         """Initialize the entity."""
-        super().__init__(coordinator, appliance)
+        super().__init__(coordinator, appliance, config_entry)
         self._attr_unique_id = f"{appliance.device_id}-{status}"
         self.status = status
         device_class = dd_entry.number.device_class
